@@ -1,0 +1,19 @@
+__pycache__/
+Data/
+mdGlobalAddr.dll
+mdGlobalAddr.dll.hash
+mdAddr.dll
+mdAddr.dll.hash
+mdGeo.dll
+mdGeo.dll.hash
+mdGlobalAddrCS.dll
+mdGlobalAddrCS.dll.hash
+mdGlobalAddrNET.dll
+mdGlobalAddrNET.dll.hash
+mdGlobalParse.dll
+mdGlobalParse.dll.hash
+mdRightFielder.dll
+mdRightFielder.dll.hash
+
+MelissaUpdater
+# mdGlobalAddr_pythoncode.py
