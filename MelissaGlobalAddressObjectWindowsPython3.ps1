@@ -4,20 +4,20 @@
 ######################### Parameters ##########################
 
 param(
-    $addressLine1 = '""',
-    $addressLine2 = '""',
-    $addressLine3 = '""',
-    $locality = '""',
-    $administrativeArea = '""',
-    $postalCode = '""',
-    $country = '""',
-    $license = '',
-    [switch]$quiet = $false
-    )
+  $addressLine1 = '""',
+  $addressLine2 = '""',
+  $addressLine3 = '""',
+  $locality = '""',
+  $administrativeArea = '""',
+  $postalCode = '""',
+  $country = '""',
+  $license = '',
+  [switch]$quiet = $false
+)
 
 ######################### Classes ##########################
 
-class DLLConfig {
+class FileConfig {
   [string] $FileName;
   [string] $ReleaseVersion;
   [string] $OS;
@@ -27,13 +27,13 @@ class DLLConfig {
 }
 
 class ManifestConfig {
-	[string] $ManifestName;
+  [string] $ManifestName;
   [string] $ReleaseVersion;
 }
 
 ######################### Config ###########################
 
-$RELEASE_VERSION = '2023.Q2'
+$RELEASE_VERSION = '2023.Q3'
 
 # Uses the location of the .ps1 file 
 # Modify this if you want to use 
@@ -47,7 +47,7 @@ If (!(Test-Path $DataPath)) {
 }
 
 $DLLs = @(
-  [DLLConfig]@{
+  [FileConfig]@{
     FileName       = "mdAddr.dll";
     ReleaseVersion = $RELEASE_VERSION;
     OS             = "WINDOWS";
@@ -55,7 +55,7 @@ $DLLs = @(
     Architecture   = "64BIT";
     Type           = "BINARY";
   },
-  [DLLConfig]@{
+  [FileConfig]@{
     FileName       = "mdGeo.dll";
     ReleaseVersion = $RELEASE_VERSION;
     OS             = "WINDOWS";
@@ -63,7 +63,7 @@ $DLLs = @(
     Architecture   = "64BIT";
     Type           = "BINARY";
   },
-  [DLLConfig]@{
+  [FileConfig]@{
     FileName       = "mdGlobalAddr.dll";
     ReleaseVersion = $RELEASE_VERSION;
     OS             = "WINDOWS";
@@ -71,7 +71,7 @@ $DLLs = @(
     Architecture   = "64BIT";
     Type           = "BINARY";
   },
-  [DLLConfig]@{
+  [FileConfig]@{
     FileName       = "mdRightFielder.dll";
     ReleaseVersion = $RELEASE_VERSION;
     OS             = "WINDOWS";
@@ -81,23 +81,21 @@ $DLLs = @(
   }
 )
 
+$Wrapper = [FileConfig]@{
+  FileName       = "mdGlobalAddr_pythoncode.py";
+  ReleaseVersion = $RELEASE_VERSION;
+  OS             = "ANY";
+  Compiler       = "PYTHON";
+  Architecture   = "ANY" ;
+  Type           = "INTERFACE"
+}
+
+
 $Manifests = @(
-	[ManifestConfig]@{
-		ManifestName	 = "global_dq_data";
-    ReleaseVersion = $RELEASE_VERSION ;
-	},
-	[ManifestConfig]@{
-		ManifestName	= "dq_addr_data"
-    ReleaseVersion = $RELEASE_VERSION ;
-	},
-	[ManifestConfig]@{
-		ManifestName	= "geocoder_data";
-    ReleaseVersion = $RELEASE_VERSION ;
-	},
-	[ManifestConfig]@{
-		ManifestName	= "rf_data";
-    ReleaseVersion = $RELEASE_VERSION ;
-	}
+  [ManifestConfig]@{
+    ManifestName   = "global_dq_data";
+    ReleaseVersion = $RELEASE_VERSION;
+  }
 )
 
 ######################## Functions #########################
@@ -107,15 +105,15 @@ function DownloadDataFiles([string] $license) {
   Write-Host "`n=============================== MELISSA UPDATER ============================="
   Write-Host "MELISSA UPDATER IS DOWNLOADING DATA FILE(S)..."
 
-	foreach ($Manifest in $Manifests) {
-		Write-Progress -Activity "Downloading Manifest(s)" -Status "$([math]::round($DataProg / $Manifests.Count * 100, 2))% Complete:"  -PercentComplete ($DataProg / $Manifests.Count * 100)
+  foreach ($Manifest in $Manifests) {
+    Write-Progress -Activity "Downloading Manifest(s)" -Status "$([math]::round($DataProg / $Manifests.Count * 100, 2))% Complete:"  -PercentComplete ($DataProg / $Manifests.Count * 100)
 	
-		.\MelissaUpdater\MelissaUpdater.exe manifest -p $Manifest.ManifestName -r $Manifest.ReleaseVersion -l $license -t $DataPath 
-		if($? -eq $False ) {
-			Write-Host "`nCannot run Melissa Updater. Please check your license string!"
-			Exit
-		} 	    
-	}
+    .\MelissaUpdater\MelissaUpdater.exe manifest -p $Manifest.ManifestName -r $Manifest.ReleaseVersion -l $license -t $DataPath 
+    if ($? -eq $False ) {
+      Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+      Exit
+    } 	    
+  }
 
   Write-Host "Melissa Updater finished downloading data file(s)!"
 }
@@ -129,22 +127,45 @@ function DownloadDLLs() {
     # Check for quiet mode
     if ($quiet) {
       .\MelissaUpdater\MelissaUpdater.exe file --filename $DLL.FileName --release_version $DLL.ReleaseVersion --license $LICENSE --os $DLL.OS --compiler $DLL.Compiler --architecture $DLL.Architecture --type $DLL.Type --target_directory $ProjectPath > $null
-      if(($?) -eq $False) {
-          Write-Host "`nCannot run Melissa Updater. Please check your license string!"
-          Exit
+      if (($?) -eq $False) {
+        Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+        Exit
       }
     }
     else {
       .\MelissaUpdater\MelissaUpdater.exe file --filename $DLL.FileName --release_version $DLL.ReleaseVersion --license $LICENSE --os $DLL.OS --compiler $DLL.Compiler --architecture $DLL.Architecture --type $DLL.Type --target_directory $ProjectPath 
-      if(($?) -eq $False) {
-          Write-Host "`nCannot run Melissa Updater. Please check your license string!"
-          Exit
+      if (($?) -eq $False) {
+        Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+        Exit
       }
     }
     
     Write-Host "Melissa Updater finished downloading " $DLL.FileName "!"
     $DLLProg++
   }
+}
+
+
+function DownloadWrapper() {
+  Write-Host "MELISSA UPDATER IS DOWNLOADING WRAPPER(S)..."
+
+  # Check for quiet mode
+  if ($quiet) {
+    .\MelissaUpdater\MelissaUpdater.exe file --filename $Wrapper.FileName --release_version $Wrapper.ReleaseVersion --license $LICENSE --os $Wrapper.OS --compiler $Wrapper.Compiler --architecture $Wrapper.Architecture --type $Wrapper.Type --target_directory $ProjectPath > $null
+    if (($?) -eq $False) {
+      Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+      Exit
+    }
+  }
+  else {
+    .\MelissaUpdater\MelissaUpdater.exe file --filename $Wrapper.FileName --release_version $Wrapper.ReleaseVersion --license $LICENSE --os $Wrapper.OS --compiler $Wrapper.Compiler --architecture $Wrapper.Architecture --type $Wrapper.Type --target_directory $ProjectPath 
+    if (($?) -eq $False) {
+      Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+      Exit
+    }
+  }
+
+  Write-Host "Melissa Updater finished downloading " $Wrapper.FileName "!"
 }
 
 

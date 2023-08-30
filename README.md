@@ -8,8 +8,6 @@ Please feel free to copy or embed this code to your own project. Happy coding!
 
 For the latest Melissa Global Address Object release notes, please visit: https://releasenotes.melissa.com/on-premise-api/global-address-object/
 
-For further details, please visit: https://wiki.melissadata.com/index.php?title=Global_Address_Object:Reference
-
 The console will ask the user for:
 
 - Address Line 1
@@ -44,7 +42,7 @@ And return
 ## Tested Environments
 
 - Windows 10 64-bit Python 3.8.7, Powershell 5.1
-- Melissa data files for 2023-Q2
+- Melissa data files for 2023-Q3
 
 ## Required File(s) and Programs
 
@@ -56,7 +54,6 @@ This is the c++ code of the Melissa Object.
 - mdGeo.dll
 - mdGlobalAddr.dll
 - mdRightFielder.dll
-
 
 
 #### Data File(s)
@@ -87,9 +84,6 @@ This is the c++ code of the Melissa Object.
 - mdAddrKeyCA.db
 - mdCanada3.db
 - mdCanadaPOC.db
-- mdLACS256.dat
-- mdEmail.cfg
-- mdEmail.db3
 - mdGeoCode.db3
 - mdGlobalAddr.ffbb
 - mdGlobalAddr.ffhb
@@ -97,19 +91,13 @@ This is the c++ code of the Melissa Object.
 - mdGlobalAddr.ffps
 - mdGlobalAddr.ffst
 - mdGlobalAddr.sac
-- mdGlobalPhone.dat
 - mdLACS256.dat
-- mdName.cfg
-- mdName.dat
-- mdPhone.dat
-- mdPhone.idx
 - mdRBDI.dat
 - mdRightFielder.cfg
 - mdRightFielder.dat
 - mdSteLink256.dat
 - mdSuiteFinder.db
 - month256.dat
-- ZIPNPA.TXT
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -155,7 +143,7 @@ The console will then prompt you with the following warning shown in the image b
 
 #### Download this project
 ```
-$ git clone https://github.com/MelissaData/GlobalAddressObject-Python3.git
+$ git clone https://github.com/MelissaData/GlobalAddressObject-Python3
 $ cd GlobalAddressObject-Python3
 ```
 
@@ -180,6 +168,12 @@ Melissa Updater is a CLI application allowing the user to update their Melissa a
 ----------------------------------------
 
 ## Run Powershell Script
+
+Please consult the release notes and wiki for the best way to input the parameters.
+
+Release Notes: https://releasenotes.melissa.com/on-premise-api/global-address-object/
+
+Wiki: https://wiki.melissadata.com/index.php?title=Result_Code_Details#Global_Address_Object
 
 Parameters:
 - -addressLine1: a test address line 1

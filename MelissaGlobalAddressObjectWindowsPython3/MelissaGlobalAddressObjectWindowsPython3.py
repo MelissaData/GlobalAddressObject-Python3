@@ -98,7 +98,6 @@ class GlobalAddressObject:
         ResultsCodes explain any issues Global Address Object has with the object.
         List of result codes for Global Address Object
         https://wiki.melissadata.com/index.php?title=Result_Code_Details#Global_Address_Object
-
         """
 
         return DataContainer(data.addressLine1, data.addressLine2, data.addressLine3, data.locality, data.administrative_area, data.postal_code, data.country, result_codes)
