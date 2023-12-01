@@ -33,7 +33,7 @@ class ManifestConfig {
 
 ######################### Config ###########################
 
-$RELEASE_VERSION = '2023.Q3'
+$RELEASE_VERSION = '2023.Q4'
 
 # Uses the location of the .ps1 file 
 # Modify this if you want to use 
