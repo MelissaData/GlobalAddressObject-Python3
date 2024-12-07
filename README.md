@@ -44,7 +44,7 @@ And return
 ## Tested Environments
 
 - Windows 10 64-bit Python 3.8.7, Powershell 5.1
-- Melissa data files for 2024-Q3
+- Melissa data files for 2024-Q4
 
 ## Required File(s) and Programs
 
@@ -145,8 +145,8 @@ The console will then prompt you with the following warning shown in the image b
 
 #### Download this project
 ```
-$ git clone https://github.com/MelissaData/GlobalAddressObject-Python3
-$ cd GlobalAddressObject-Python3
+git clone https://github.com/MelissaData/GlobalAddressObject-Python3
+cd GlobalAddressObject-Python3
 ```
 
 #### Set up Melissa Updater 
@@ -189,25 +189,25 @@ When you have modified the script to match your data location, let's run the scr
 
 	The script will prompt the user for an address line 1, address line 2, address line 3, locality, administrative area, postal code, and country, then use the provided inputs to test Global Address Object. For example:
 	```
-	$ .\MelissaGlobalAddressObjectWindowsPython3.ps1
+	.\MelissaGlobalAddressObjectWindowsPython3.ps1
 	```
 	For quiet mode:
 	```
-	$ .\MelissaGlobalAddressObjectWindowsPython3.ps1 -quiet
+	.\MelissaGlobalAddressObjectWindowsPython3.ps1 -quiet
 	```
 - Command Line 
 
 	You can pass an address line 1, address line 2, address line 3, locality, administrative area, postal code, country, and a license string into the ```-addressLine1```, ```-addressLine2```, ```-addressLine3```, ```-locality```, ```-administrativeArea```, ```-postalCode```, ```-country```, and ```-license``` parameters respectively to test Global Address Object. For example:
 
 	```
-	$ .\MelissaGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" 
-	$ .\MelissaGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -license "<your_license_string>"
+	.\MelissaGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" 
+	.\MelissaGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -license "<your_license_string>"
 	```
 
 	For quiet mode:
 	```
-	$ .\MelissaGlobalGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -quiet
-	$ .\MelissaGlobalGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -license "<your_license_string>" -quiet
+	.\MelissaGlobalGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -quiet
+	.\MelissaGlobalGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -license "<your_license_string>" -quiet
 	```
 
 This is the expected output from a successful setup for interactive mode:
@@ -224,8 +224,6 @@ Troubleshooting for errors found while running your program.
 | Error      | Description |
 | ----------- | ----------- |
 | ErrorRequiredFileNotFound      | Program is missing a required file. Please check your Data folder and refer to the list of required files above. If you are unable to obtain all required files through the Melissa Updater, please contact technical support below. |
-| ErrorDatabaseExpired   | .db file(s) are expired. Please make sure you are downloading and using the latest release version. (If using the Melissa Updater, check powershell script for '$RELEASE_VERSION = {version}'  and change the release version if you are using an out of date release).     |
-| ErrorFoundOldFile   | File(s) are out of date. Please make sure you are downloading and using the latest release version. (If using the Melissa Updater, check powershell script for '$RELEASE_VERSION = {version}'  and change the release version if you are using an out of date release).    |
 | ErrorLicenseExpired   | Expired license string. Please contact technical support below. |
 
 
