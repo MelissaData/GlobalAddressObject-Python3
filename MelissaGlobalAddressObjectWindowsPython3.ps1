@@ -1,5 +1,61 @@
-# Name:    MelissaGlobalAddressObjectWindowsPython3
-# Purpose: Use the Melissa Updater to make the MelissaAddressObjectWindowsPython3 code usable
+<#
+.SYNOPSIS
+    Downloads the required components and then runs MelissaGlobalAddressObjectWindowsPython3
+
+.DESCRIPTION
+    This script uses the Melissa Updater to fetch the data file(s) and DLL(s),
+    verifies the DLL(s) downloaded, then runs the Python script against the supplied address.
+
+    Overall flow:
+      1. Read parameters / prompt for the license and data path.
+      2. Download data file(s) and DLL(s) via the Melissa Updater.
+      3. Confirm the DLL(s) are present.
+      4. Run the script (single test address or interactive).
+
+.PARAMETER addressLine1
+    First address line of the address to verify.
+
+.PARAMETER addressLine2
+    Second address line of the address to verify.
+
+.PARAMETER addressLine3
+    Third address line of the address to verify.
+
+.PARAMETER locality
+    Locality (city) of the address to verify.
+
+.PARAMETER administrativeArea
+    Administrative area (state/province) of the address to verify.
+
+.PARAMETER postalCode
+    Postal code of the address to verify.
+
+.PARAMETER country
+    Country of the address to verify.
+
+.PARAMETER dataPath
+    Path to an existing data files directory. If omitted, the script prompts for
+    a path; pressing Enter at that prompt skips it and downloads the data files
+    into the project's Data folder via the Melissa Updater. A path that does not
+    exist aborts the script.
+
+.PARAMETER license
+    License string. Resolved in this order:
+      1. This parameter.
+      2. An interactive prompt, if the parameter was not supplied.
+      3. The MD_LICENSE environment variable, if the prompt was left blank.
+    Note that the environment variable is the last resort, not the first: running
+    without -license always prompts, even when MD_LICENSE is set.
+
+.PARAMETER quiet
+    Suppresses the Melissa Updater console output during downloads.
+
+.EXAMPLE
+    .\MelissaGlobalAddressObjectWindowsPython3.ps1 -license "your-license"
+
+.EXAMPLE
+    .\MelissaGlobalAddressObjectWindowsPython3.ps1 -addressLine1 "Melissa Data GmbH" -addressLine2 "Cäcilienstr. 42-44" -addressLine3 "50667 Köln" -country "Germany" -license "your-license"
+#>
 
 ######################### Parameters ##########################
 
@@ -18,6 +74,7 @@ param(
 
 ######################### Classes ##########################
 
+# Describes a single file to request from the Melissa Updater
 class FileConfig {
   [string] $FileName;
   [string] $ReleaseVersion;
@@ -29,6 +86,7 @@ class FileConfig {
 
 ######################### Config ###########################
 
+# Product release the updater pulls files for
 $RELEASE_VERSION = '2026.Q3'
 $ProductName = "GLOBAL_DQ_DATA"
 
@@ -51,6 +109,7 @@ elseif (!(Test-Path $DataPath) -and ($DataPath -ne "$ProjectPath\Data")) {
   exit
 }
 
+# Binary/DLL(s) needed to run the example
 $DLLs = @(
   [FileConfig]@{
     FileName       = "mdAddr.dll";
@@ -86,6 +145,7 @@ $DLLs = @(
   }
 )
 
+# Python wrapper source that exposes the DLL to the script
 $Wrapper = [FileConfig]@{
   FileName       = "mdGlobalAddr_pythoncode.py";
   ReleaseVersion = $RELEASE_VERSION;
@@ -97,6 +157,7 @@ $Wrapper = [FileConfig]@{
 
 ######################## Functions #########################
 
+# Download the product data file(s) into $DataPath via the Melissa Updater.
 function DownloadDataFiles([string] $license) {
   Write-Host "`n=============================== MELISSA UPDATER ============================="
   Write-Host "MELISSA UPDATER IS DOWNLOADING DATA FILE(S)..."
@@ -110,6 +171,7 @@ function DownloadDataFiles([string] $license) {
   Write-Host "Melissa Updater finished downloading data file(s)!"
 }
 
+# Download each DLL in $DLLs into the project folder (with a progress bar).
 function DownloadDLLs() {
   Write-Host "MELISSA UPDATER IS DOWNLOADING DLL(s)..."
   $DLLProg = 0
@@ -138,6 +200,7 @@ function DownloadDLLs() {
 }
 
 
+# Download the Python wrapper source into the project folder.
 function DownloadWrapper() {
   Write-Host "MELISSA UPDATER IS DOWNLOADING WRAPPER(S)..."
 
@@ -161,6 +224,7 @@ function DownloadWrapper() {
 }
 
 
+# Verify the expected DLL(s) landed in the project folder
 function CheckDLLs() {
   Write-Host "`nDouble checking dll(s) were downloaded...`n"
   $FileMissing = $false 
@@ -243,6 +307,8 @@ Write-Host "All file(s) have been downloaded/updated! "
 
 # Start
 # Run project
+# No address supplied -> run interactively; otherwise pass the address in.
+# Push-Location switches into the project folder first so the script and wrapper resolve.
 if ([string]::IsNullOrEmpty($addressLine1) -and [string]::IsNullOrEmpty($addressLine2) -and [string]::IsNullOrEmpty($addressLine3) -and [string]::IsNullOrEmpty($locality) -and [string]::IsNullOrEmpty($administrativeArea) -and [string]::IsNullOrEmpty($postalCode) -and [string]::IsNullOrEmpty($country)) {
   Push-Location MelissaGlobalAddressObjectWindowsPython3
   python3 MelissaGlobalAddressObjectWindowsPython3.py --license $License  --dataPath $DataPath
